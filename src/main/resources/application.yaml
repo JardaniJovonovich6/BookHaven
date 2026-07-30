@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: BookHaven
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/RestRentals
+    username: postgres   # replace with your PostgreSQL username
+    password: Aman@1234   # replace with your PostgreSQL password
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
