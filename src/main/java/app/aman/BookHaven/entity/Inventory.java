@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
+//fresh inventory added
+//commit 1
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
