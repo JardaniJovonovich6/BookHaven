@@ -2,6 +2,7 @@ package app.aman.BookHaven.dto;
 
 import app.aman.BookHaven.entity.HotelContactInfo;
 
+@Data
 public class HotelDto {
     private Long id;
     private String name;

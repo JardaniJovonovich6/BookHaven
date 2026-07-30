@@ -1,7 +1,10 @@
 package app.aman.BookHaven.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class RoomDto {
     private Long id;
     private String type;
