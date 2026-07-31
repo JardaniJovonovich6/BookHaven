@@ -1,6 +1,7 @@
 package app.aman.BookHaven.dto;
 
 import app.aman.BookHaven.entity.HotelContactInfo;
+import lombok.Data;
 
 @Data
 public class HotelDto {
