@@ -75,6 +75,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    @Transactional
     public void activateHotel(Long hotelId) {
         log.info("Activating the hotel with ID: {}", hotelId);
         Hotel hotel = hotelRepository
