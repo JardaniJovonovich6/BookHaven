@@ -32,5 +32,28 @@ public class Hotelcontroller {
         return ResponseEntity.ok(hotelDto);
     }
 
+    @PutMapping("/{hotelId}")
+    public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId, @RequestBody HotelDto hotelDto) {
+        HotelDto hotel = hotelService.updateHotelById(hotelId, hotelDto);
+        return ResponseEntity.ok(hotel);
+    }
+
+    @DeleteMapping("/{hotelId}")
+    public ResponseEntity<Void> deleteHotelById(@PathVariable Long hotelId) {
+        hotelService.deleteHotelById(hotelId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{hotelId}")
+    public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId) {
+        hotelService.activateHotel(hotelId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
+
 
 }
