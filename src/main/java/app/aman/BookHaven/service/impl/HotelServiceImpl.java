@@ -2,9 +2,11 @@ package app.aman.BookHaven.service.impl;
 
 import app.aman.BookHaven.dto.HotelDto;
 import app.aman.BookHaven.entity.Hotel;
+import app.aman.BookHaven.entity.Room;
 import app.aman.BookHaven.exception.ResourceNotFoundException;
 import app.aman.BookHaven.repository.HotelRepository;
 import app.aman.BookHaven.service.HotelService;
+import app.aman.BookHaven.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,7 @@ public class HotelServiceImpl implements HotelService {
 
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
+    private final InventoryService inventoryService;
 
     @Override
     public HotelDto createNewHotel(HotelDto hotelDto) {
@@ -61,11 +64,28 @@ public class HotelServiceImpl implements HotelService {
     @Override
     @Transactional
     public void deleteHotelById(Long id) {
+        Hotel hotel = hotelRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID: "+id));
 
+        hotelRepository.deleteById(id);
+        for(Room room: hotel.getRooms()) {
+            inventoryService.deleteFutureInventories(room);
+        }
     }
 
     @Override
     public void activateHotel(Long hotelId) {
+        log.info("Activating the hotel with ID: {}", hotelId);
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID: "+hotelId));
 
+        hotel.setActive(true);
+
+        // assuming only do it once
+        for(Room room: hotel.getRooms()) {
+            inventoryService.initializeRoomForAYear(room);
+        }
     }
 }
