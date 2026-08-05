@@ -77,4 +77,15 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.deleteById(roomId);
 
     }
+
+
+    @Override
+    public RoomDto updateRoomById(Long roomId, RoomDto roomDto) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot update a room as Room with id : " + roomId + " cannot be found"));
+        deleteRoomById(roomId);
+        RoomDto updatedroom = createNewRoom(room.getHotel().getId() , roomDto);
+
+        return updatedroom ;
+    }
 }
