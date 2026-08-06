@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
 @RequestMapping("/admin/hotel")
 @RestController
 @Slf4j
@@ -50,10 +49,6 @@ public class Hotelcontroller {
         hotelService.activateHotel(hotelId);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
 
 
 }
