@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/RestRentals
-    username: postgres   # replace with your PostgreSQL username
-    password: Aman@1234   # replace with your PostgreSQL password
+    username: postgres
+    password: Aman@1234
 
   jpa:
     hibernate:
