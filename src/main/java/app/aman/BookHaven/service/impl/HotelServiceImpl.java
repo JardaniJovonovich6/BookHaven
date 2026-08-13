@@ -1,6 +1,8 @@
 package app.aman.BookHaven.service.impl;
 
 import app.aman.BookHaven.dto.HotelDto;
+import app.aman.BookHaven.dto.HotelInfoDto;
+import app.aman.BookHaven.dto.RoomDto;
 import app.aman.BookHaven.entity.Hotel;
 import app.aman.BookHaven.entity.Room;
 import app.aman.BookHaven.exception.ResourceNotFoundException;
@@ -91,5 +93,19 @@ public class HotelServiceImpl implements HotelService {
         for(Room room: hotel.getRooms()) {
             inventoryService.initializeRoomForAYear(room);
         }
+    }
+
+    @Override
+    public HotelInfoDto getHotelInfoById(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel was not found with the ID : " + hotelId));
+
+        List<RoomDto> roomlist = hotel.getRooms()
+                .stream()
+                .map(room -> modelMapper.map(room , RoomDto.class))
+                .toList();
+
+
+        return new HotelInfoDto(modelMapper.map(hotel , HotelDto.class) , roomlist);
     }
 }
