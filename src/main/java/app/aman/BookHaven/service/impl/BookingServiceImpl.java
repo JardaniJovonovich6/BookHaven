@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public @Nullable BookingDto initialiseBooking(BookingRequest bookingRequest) {
+    public BookingDto initialiseBooking(BookingRequest bookingRequest) {
 
         log.info("Initialising booking for hotel : {}, room: {}, date {}-{}", bookingRequest.getHotelId(),
                 bookingRequest.getRoomId(), bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
@@ -48,7 +48,15 @@ public class BookingServiceImpl implements BookingService {
         List<Inventory> inventoryList = inventoryRepository.findAndLockAvailableInventory(room.getId(),
                 bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate(), bookingRequest.getRoomsCount());
 //calculating days count to see the rooms in inventory is sufficient
-        long daysCount = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate())+1;
+//        long daysCount = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate())+1;
+
+        long daysCount =
+                ChronoUnit.DAYS.between(
+                        bookingRequest.getCheckInDate(),
+                        bookingRequest.getCheckOutDate()
+                );
+
+
 // here we check that rooms are sufficient or not
         // if not throw exception
         if (inventoryList.size() != daysCount) {
