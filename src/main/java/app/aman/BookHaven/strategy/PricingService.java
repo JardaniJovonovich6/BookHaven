@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
+// using decoriative pattern
 public class PricingService {
 
     public BigDecimal calculateDynamicPricing(Inventory inventory) {
