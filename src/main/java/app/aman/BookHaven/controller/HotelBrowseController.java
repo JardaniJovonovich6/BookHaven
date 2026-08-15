@@ -3,6 +3,7 @@ package app.aman.BookHaven.controller;
 
 import app.aman.BookHaven.dto.HotelDto;
 import app.aman.BookHaven.dto.HotelInfoDto;
+import app.aman.BookHaven.dto.HotelPriceDto;
 import app.aman.BookHaven.dto.HotelSearchRequest;
 import app.aman.BookHaven.service.HotelService;
 import app.aman.BookHaven.service.InventoryService;
@@ -19,10 +20,13 @@ public class HotelBrowseController {
     private final InventoryService inventoryService;
     private final HotelService hotelService;
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<HotelDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
+    @PostMapping("/search")
+    public ResponseEntity<Page<HotelPriceDto>> searchHotels(
+            @RequestBody HotelSearchRequest hotelSearchRequest) {
 
-        Page<HotelDto> page = inventoryService.searchHotels(hotelSearchRequest);
+        Page<HotelPriceDto> page =
+                inventoryService.searchHotels(hotelSearchRequest);
+
         return ResponseEntity.ok(page);
     }
 
