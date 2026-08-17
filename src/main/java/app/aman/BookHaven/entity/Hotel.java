@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -46,7 +47,7 @@ public class Hotel {
     private Boolean active;
 
     //adding owner for a hotel or hotels
-    @ManyToOne
+    @ManyToOne(optional = false , fetch = FetchType.LAZY)
     private User owner;
 
 

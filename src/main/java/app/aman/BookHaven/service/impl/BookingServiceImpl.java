@@ -6,12 +6,14 @@ import app.aman.BookHaven.dto.GuestDto;
 import app.aman.BookHaven.entity.*;
 import app.aman.BookHaven.entity.enums.BookingStatus;
 import app.aman.BookHaven.exception.ResourceNotFoundException;
+import app.aman.BookHaven.exception.UnAuthorisedException;
 import app.aman.BookHaven.repository.*;
 import app.aman.BookHaven.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,6 +103,14 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new ResourceNotFoundException("Booking not found with id: "+bookingId));
 
+        //getting user(from security context or may be dummy)
+        // NOTE : User depends on getCurrentUser() method
+        User user = getCurrentUser();
+
+        if (!user.equals(booking.getUser())) {
+            throw new UnAuthorisedException("Booking does not belong to this user with id: "+user.getId());
+        }
+
         if (hasBookingExpired(booking)) {
             throw new IllegalStateException("Booking has already expired");
         }
@@ -111,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
 
         for (GuestDto guestDto: guestDtoList) {
             Guest guest = modelMapper.map(guestDto, Guest.class);
-            guest.setUser(getCurrentUser());
+            guest.setUser(user);
             guest = guestRepository.save(guest);
             booking.getGuests().add(guest);
         }
@@ -127,8 +137,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public User getCurrentUser() {
-        User user = new User();
-        user.setId(1L); // TODO: REMOVE DUMMY USER
-        return user;
+//        User user = new User();
+//        user.setId(1L); // TODO: REMOVE DUMMY USER
+//        return user;
+
+        // Dummy User removed
+
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
