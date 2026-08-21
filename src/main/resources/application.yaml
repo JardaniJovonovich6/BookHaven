@@ -20,12 +20,13 @@ server :
     context-path : /api/v1
 
 jwt:
-  secretKey : ${JWT_SECRET_KEY}
+  secretKey : ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
 
 
 frontend:
       url : http://localhost:8080
 
+
 stripe:
-  secret-key: ${STRIPE_SECRET_KEY}
-  webhook-secret: ${STRIPE_WEBHOOK_SECRET}
+  secret.key: ${STRIPE_SECRET_KEY:sk_test_dummy}
+  webhook.secret: ${STRIPE_WEBHOOK_SECRET:whsec_dummy}
