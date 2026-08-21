@@ -35,7 +35,7 @@ public class PricingUpdateService {
     private final PricingService pricingService;
 
 
-        @Scheduled(cron = "*/10 * * * * *")
+//    @Scheduled(cron = "* */5 * * * *")
 //    @Scheduled(cron = "0 0 * * * *")
     public void updatePrices(){
         int page = 0;

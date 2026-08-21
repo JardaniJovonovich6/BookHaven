@@ -3,7 +3,7 @@ package app.aman.BookHaven.entity.enums;
 public enum BookingStatus {
     RESERVED,
     GUESTS_ADDED,
-    PAYMENT_PENDING,
+    PAYMENTS_PENDING,    // fucked up for just One S
     CONFIRMED,
     CANCELLED,
     EXPIRED

@@ -2,49 +2,35 @@ package app.aman.BookHaven.entity;
 
 
 import app.aman.BookHaven.entity.enums.PaymentStatus;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.AnyDiscriminatorImplicitValues;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Entity
-@Setter
-@Getter
-
-
+/**
+ * Disabled entity — the {@code @Entity} annotation has been removed intentionally.
+ * JPA / Hibernate will NOT manage this class anymore, so no {@code payment} table
+ * is created and it can't be referenced from repositories or JPQL queries.
+ *
+ * The project uses Stripe Checkout Sessions (via {@code Booking.paymentSessionId})
+ * for payment handling, so this entity is no longer needed.
+ * Keep this class for reference only; do not re-add {@code @Entity}.
+ */
+// @Entity  <-- deliberately removed
+    @Deprecated
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , unique = true)
     private String transactionId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    @Column(nullable = false , precision = 8 , scale = 2)
     private BigDecimal amount;
 
-    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
     private Booking booking;
-
 
 }

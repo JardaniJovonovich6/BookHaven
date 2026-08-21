@@ -46,6 +46,7 @@ application-local.properties
 application-local.yaml
 application-local.yml
 
+
 # Package files
 *.jar
 *.war
