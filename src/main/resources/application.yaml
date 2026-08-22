@@ -3,24 +3,25 @@ spring:
     name: BookHaven
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/RestRentals
-    username: postgres
-    password: Aman@1234
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
     properties:
-      hibernate:
-        format_sql: true
+      hibernate :
+        format_sql : true
 
 server :
   servlet :
     context-path : /api/v1
 
 jwt:
-  secretKey : ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  secretKey : ${JWT_SECRET_KEY}
+
 
 
 frontend:
@@ -28,5 +29,5 @@ frontend:
 
 
 stripe:
-  secret.key: ${STRIPE_SECRET_KEY:sk_test_dummy}
-  webhook.secret: ${STRIPE_WEBHOOK_SECRET:whsec_dummy}
+  secret.key : ${STRIPE_SECRET_KEY}
+  webhook.secret : ${STRIPE_WEBHOOK_SECRET}

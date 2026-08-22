@@ -17,8 +17,8 @@ public class BookHavenApplication {
         Dotenv dotenv = Dotenv.configure()
                 .directory("./") // Explicitly point to root project directory
                 .ignoreIfMissing()
-                .systemProperties() // Directly injects into System properties before Spring starts
                 .load();
+        dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
     }
 
 	public static void main(String[] args) {

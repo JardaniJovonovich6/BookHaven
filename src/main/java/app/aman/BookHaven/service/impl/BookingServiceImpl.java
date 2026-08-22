@@ -13,6 +13,7 @@ import app.aman.BookHaven.service.CheckoutService;
 import app.aman.BookHaven.strategy.PricingService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
+import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.Refund;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.RefundCreateParams;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -180,32 +183,98 @@ public class BookingServiceImpl implements BookingService {
         return sessionUrl;
     }
 
+    //The following code is not working as Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+    // getDataObjectDeserializer().getObject() of stripe SDK model is not working and not able to fetch the session ,
+    // so we used Object Mapper and the Deserializer to obtain the Session Id from the events which is passed by the webhook controller
+
+//    @Override
+//    @Transactional
+//    public void capturePayment(Event event) {
+//        if ("checkout.session.completed".equals(event.getType())) {
+//            Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+//            if (session == null) {
+//                return;
+//            }
+//
+//            String sessionId = session.getId();
+//            Booking booking =
+//                    bookingRepository.findByPaymentSessionId(sessionId).orElseThrow(() ->
+//                            new ResourceNotFoundException("Booking not found for session ID: "+sessionId));
+//
+//            booking.setBookingStatus(BookingStatus.CONFIRMED);
+//            bookingRepository.save(booking);
+//
+//            inventoryRepository.findAndLockReservedInventory(booking.getRoom().getId(), booking.getCheckInDate(),
+//                    booking.getCheckOutDate(), booking.getRoomsCount());
+//
+//            inventoryRepository.confirmBooking(booking.getRoom().getId(), booking.getCheckInDate(),
+//                    booking.getCheckOutDate(), booking.getRoomsCount());
+//
+//            log.info("Successfully confirmed the booking for Booking ID: {}", booking.getId());
+//        } else {
+//            log.warn("Unhandled event type: {}", event.getType());
+//        }
+//    }
+
+    //The following code is not working as Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+    // getDataObjectDeserializer().getObject() of stripe SDK model is not working and not able to fetch the session ,
+    // so we used Object Mapper and the Deserializer to obtain the Session Id from the events which is passed by the webhook controller
     @Override
     @Transactional
     public void capturePayment(Event event) {
-        if ("checkout.session.completed".equals(event.getType())) {
-            Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
-            if (session == null) return;
+
+        if("checkout.session.completed".equals(event.getType())){
+//            Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+            Session session = retrieveSessionFromEvent(event);
+            if(session == null|| session.getId()==null)return;
 
             String sessionId = session.getId();
-            Booking booking =
-                    bookingRepository.findByPaymentSessionId(sessionId).orElseThrow(() ->
-                            new ResourceNotFoundException("Booking not found for session ID: "+sessionId));
+            Booking booking = bookingRepository.findByPaymentSessionId(sessionId).orElseThrow(
+                    ()-> new ResourceNotFoundException("Booking not found for session Id :"+sessionId)
+            );
 
             booking.setBookingStatus(BookingStatus.CONFIRMED);
             bookingRepository.save(booking);
 
-            inventoryRepository.findAndLockReservedInventory(booking.getRoom().getId(), booking.getCheckInDate(),
-                    booking.getCheckOutDate(), booking.getRoomsCount());
+            inventoryRepository.findAndLockReservedInventory(booking.getRoom().getId(),booking.getCheckInDate()
+                    ,booking.getCheckOutDate(),booking.getRoomsCount());
+            inventoryRepository.confirmBooking(booking.getRoom().getId(),booking.getCheckInDate()
+                    ,booking.getCheckOutDate(),booking.getRoomsCount());
 
-            inventoryRepository.confirmBooking(booking.getRoom().getId(), booking.getCheckInDate(),
-                    booking.getCheckOutDate(), booking.getRoomsCount());
-
-            log.info("Successfully confirmed the booking for Booking ID: {}", booking.getId());
-        } else {
-            log.warn("Unhandled event type: {}", event.getType());
+            log.info("Successfully confirmed the booking for Booking Id : {}",booking.getId());
+        }
+        else {
+            log.warn("Unhandled event Type : {}",event.getType());
         }
     }
+
+    //The following code is not working as Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+    // getDataObjectDeserializer().getObject() of stripe SDK model is not working and not able to fetch the session ,
+    // so we used Object Mapper and the Deserializer to obtain the Session Id from the events which is passed by the webhook controller
+
+    private Session retrieveSessionFromEvent(Event event) {
+        log.info("inside  retrieveSessionFromEvent");
+        try {
+
+//            Deserializing the event from the webhook
+            EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
+            if (deserializer.getObject().isPresent()) {
+                return (Session) deserializer.getObject().get();
+            } else {
+                //getting the data from Json to string
+                String rawJson = event.getData().getObject().toJson();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(rawJson);
+                //getting the session id
+                String sessionId = jsonNode.get("id").asText();
+                //retriving the session ID
+                return Session.retrieve(sessionId);
+            }
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Failed to retrieve session data");
+        }
+    }
+
 
     @Override
     @Transactional
@@ -218,7 +287,7 @@ public class BookingServiceImpl implements BookingService {
             throw new UnAuthorisedException("Booking does not belong to this user with id: "+user.getId());
         }
 
-        if(booking.getBookingStatus() != BookingStatus.CONFIRMED) {
+        if(booking.getBookingStatus() !=  BookingStatus.CONFIRMED){
             throw new IllegalStateException("Only confirmed bookings can be cancelled");
         }
 
