@@ -47,7 +47,7 @@ public class Hotel {
     private Boolean active;
 
     //adding owner for a hotel or hotels
-    @ManyToOne(optional = false , fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private User owner;
 
 

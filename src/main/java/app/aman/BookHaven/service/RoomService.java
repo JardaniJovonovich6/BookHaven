@@ -15,5 +15,5 @@ public interface RoomService {
 
 
     //implementing updateRoomById
-    RoomDto updateRoomById(Long roomId, RoomDto roomDto);
+    public RoomDto updateRoomById(Long hotelId, Long roomId, RoomDto roomDto);
 }

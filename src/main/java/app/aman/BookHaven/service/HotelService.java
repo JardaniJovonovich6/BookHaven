@@ -2,7 +2,10 @@ package app.aman.BookHaven.service;
 
 import app.aman.BookHaven.dto.HotelDto;
 import app.aman.BookHaven.dto.HotelInfoDto;
+import app.aman.BookHaven.dto.HotelInfoRequestDto;
 import org.jspecify.annotations.Nullable;
+
+import java.util.List;
 
 public interface HotelService {
     HotelDto createNewHotel(HotelDto hotelDto);
@@ -15,5 +18,7 @@ public interface HotelService {
 
     void activateHotel(Long hotelId);
 
-    HotelInfoDto getHotelInfoById(Long hotelId);
+    HotelInfoDto getHotelInfoById(Long hotelId , HotelInfoRequestDto hotelInfoRequestDto);
+
+    List<HotelDto> getAllHotels();
 }

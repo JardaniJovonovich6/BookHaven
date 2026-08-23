@@ -3,9 +3,9 @@ spring:
     name: BookHaven
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url:
+    username: postgres
+    password:
 
   jpa:
     hibernate:
@@ -13,21 +13,21 @@ spring:
     show-sql: false
     properties:
       hibernate :
-        format_sql : true
+        format_sql: true
 
 server :
   servlet :
     context-path : /api/v1
 
 jwt:
-  secretKey : ${JWT_SECRET_KEY}
+  secretKey :
 
 
 
 frontend:
-      url : http://localhost:8080
+      url :
 
 
 stripe:
-  secret.key : ${STRIPE_SECRET_KEY}
-  webhook.secret : ${STRIPE_WEBHOOK_SECRET}
+  secret.key :
+  webhook.secret :

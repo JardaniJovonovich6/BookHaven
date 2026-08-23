@@ -46,6 +46,11 @@ application-local.properties
 application-local.yaml
 application-local.yml
 
+# Node modules
+node_modules/
+
+# Build artifacts
+build/
 
 # Package files
 *.jar

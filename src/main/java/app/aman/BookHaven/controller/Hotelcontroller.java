@@ -1,14 +1,21 @@
 package app.aman.BookHaven.controller;
 
 
+import app.aman.BookHaven.dto.BookingDto;
 import app.aman.BookHaven.dto.HotelDto;
+import app.aman.BookHaven.dto.HotelReportDto;
+import app.aman.BookHaven.service.BookingService;
 import app.aman.BookHaven.service.HotelService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RequestMapping("/admin/hotel")
 @RestController
@@ -17,8 +24,10 @@ import org.springframework.web.bind.annotation.*;
 public class Hotelcontroller {
 
     private final HotelService hotelService;
+    private final BookingService bookingService;
 
     @PostMapping
+    @Operation(summary = "Create a new hotel", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> createNewHotel(@RequestBody HotelDto hotelDto) {
         log.info("Attempting to create a new hotel with name: "+hotelDto.getName());
         HotelDto hotel = hotelService.createNewHotel(hotelDto);
@@ -26,18 +35,21 @@ public class Hotelcontroller {
     }
 
     @GetMapping("/{hotelId}")
+    @Operation(summary = "Get a hotel by Id", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> getHotelById(@PathVariable Long hotelId) {
         HotelDto hotelDto = hotelService.getHotelById(hotelId);
         return ResponseEntity.ok(hotelDto);
     }
 
     @PutMapping("/{hotelId}")
+    @Operation(summary = "Update a hotel", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId, @RequestBody HotelDto hotelDto) {
         HotelDto hotel = hotelService.updateHotelById(hotelId, hotelDto);
         return ResponseEntity.ok(hotel);
     }
 
     @DeleteMapping("/{hotelId}")
+    @Operation(summary = "Delete a hotel", tags = {"Admin Hotel"})
     public ResponseEntity<Void> deleteHotelById(@PathVariable Long hotelId) {
         hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
@@ -45,9 +57,35 @@ public class Hotelcontroller {
 
 
     @PatchMapping("/{hotelId}/activate")
+    @Operation(summary = "Activate a hotel", tags = {"Admin Hotel"})
     public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId) {
         hotelService.activateHotel(hotelId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping
+    @Operation(summary = "Get all hotels owned by admin", tags = {"Admin Hotel"})
+    public ResponseEntity<List<HotelDto>> getAllHotels() {
+        return ResponseEntity.ok(hotelService.getAllHotels());
+    }
+
+    @GetMapping("/{hotelId}/bookings")
+    @Operation(summary = "Get all bookings of a hotel", tags = {"Admin Bookings"})
+    public ResponseEntity<List<BookingDto>> getAllBookingsByHotelId(@PathVariable Long hotelId) {
+        return ResponseEntity.ok(bookingService.getAllBookingsByHotelId(hotelId));
+    }
+
+    @GetMapping("/{hotelId}/reports")
+    @Operation(summary = "Generate a bookings report of a hotel", tags = {"Admin Bookings"})
+    public ResponseEntity<HotelReportDto> getHotelReport(@PathVariable Long hotelId,
+                                                         @RequestParam(required = false) LocalDate startDate,
+                                                         @RequestParam(required = false) LocalDate endDate) {
+
+        if (startDate == null) startDate = LocalDate.now().minusMonths(1);
+        if (endDate == null) endDate = LocalDate.now();
+
+        return ResponseEntity.ok(bookingService.getHotelReport(hotelId, startDate, endDate));
     }
 
 
