@@ -1,7 +1,7 @@
 # BookHaven - Hotel Booking Application
 
 ## Overview
-BookHaven is a hotel booking application built with Spring Boot for the backend and React for the frontend. This application allows users to browse hotels, book rooms, and make payments using Stripe.
+BookHaven is a hotel booking application built with Spring Boot for the backend. This application allows users to browse hotels, book rooms, and make payments using Stripe.
 
 ## Features
 
@@ -14,13 +14,6 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
 - **Inventory Management:** Manage room availability and pricing.
 - **Pricing Strategies:** Dynamic pricing based on various strategies.
 
-### Frontend Features (Planned)
-- **User Authentication:** Login and signup pages.
-- **Hotel Browsing:** Search and filter hotels.
-- **Room Booking:** Select dates and rooms.
-- **Payment Processing:** Stripe checkout for payments.
-- **Admin Dashboard:** Manage hotels, rooms, and bookings.
-
 ## Technologies
 
 ### Backend
@@ -30,11 +23,27 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
 - **Payment Processing:** Stripe
 - **Documentation:** SpringDoc OpenAPI
 
-### Frontend (Planned)
-- **Framework:** React
-- **Styling:** CSS Modules / React Bootstrap
-- **State Management:** React Context / Redux
-- **Routing:** React Router
+## File Structure
+
+```
+src/
+├── main/
+│   ├── java/app/aman/BookHaven/
+│   │   ├── advice/               # Exception handling and global responses
+│   │   ├── config/               # Configuration classes
+│   │   ├── controller/           # REST API controllers
+│   │   ├── dto/                  # Data Transfer Objects
+│   │   ├── entity/               # JPA entities
+│   │   │   └── enums/           # Enumerations
+│   │   ├── repository/           # JPA repositories
+│   │   ├── security/             # Security configuration
+│   │   ├── service/              # Service interfaces
+│   │   │   └── impl/            # Service implementations
+│   │   └── strategy/             # Pricing strategies
+│   └── resources/
+│       └── application.yaml     # Application configuration
+└── test/                        # Test classes
+```
 
 ## Getting Started
 
@@ -42,7 +51,6 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
 - Java 25
 - Maven
 - PostgreSQL
-- Node.js (for frontend)
 
 ### Installation
 
@@ -81,9 +89,6 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
    jwt:
      secretKey: yoursecretkey
 
-   frontend:
-     url: http://localhost:3000
-
    stripe:
      secret:
        key: yourstripekey
@@ -96,19 +101,7 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
    mvn spring-boot:run
    ```
 
-#### Frontend (Planned)
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the application:
-   ```bash
-   npm start
-   ```
+
 
 ## API Documentation
 
@@ -130,12 +123,7 @@ BookHaven is a hotel booking application built with Spring Boot for the backend 
 2. Deploy the JAR file to a server (e.g., AWS, Heroku).
 3. Configure the database and other environment variables.
 
-### Frontend (Planned)
-1. Build the application:
-   ```bash
-   npm run build
-   ```
-2. Deploy the `build` folder to a static hosting service (e.g., Vercel, Netlify).
+
 
 ## Video Demonstration
 
@@ -166,8 +154,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For questions or feedback, please contact:
-- **Email:** your.email@example.com
-- **GitHub:** [yourusername](https://github.com/yourusername)
+- **Email:** ashaw8176@gmail.com
+- **GitHub:** [JardaniJovonovich6](https://github.com/JardaniJovonovich6)
+
+## Contact
+
+For questions or feedback, please contact:
+- **Email:** ashaw8176@gmail.com
+- **GitHub:** [JardaniJovonovich6](https://github.com/JardaniJovonovich6)
 
 ## Acknowledgments
 

@@ -168,9 +168,6 @@ src/
      jwt:
        secretKey: yoursecretkey
 
-     frontend:
-       url: http://localhost:3000
-
      stripe:
        secret:
          key: yourstripekey
@@ -197,3 +194,9 @@ Replace `YOUR_VIDEO_ID` with the actual YouTube video ID.
 ## Conclusion
 
 This document provides a high-level overview of the BookHaven backend project. It includes the file structure, features, authentication, third-party dependencies, and deployment instructions. For more details, refer to the individual files and the API documentation.
+
+## Contact
+
+For questions or feedback, please contact:
+- **Email:** ashaw8176@gmail.com
+- **GitHub:** [JardaniJovonovich6](https://github.com/JardaniJovonovich6)

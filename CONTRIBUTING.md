@@ -100,7 +100,7 @@ By contributing to BookHaven, you agree that your contributions will be licensed
 ## Contact
 
 For questions or feedback, please contact:
-- **Email:** your.email@example.com
-- **GitHub:** [yourusername](https://github.com/yourusername)
+- **Email:** ashaw8176@gmail.com
+- **GitHub:** [JardaniJovonovich6](https://github.com/JardaniJovonovich6)
 
 Thank you for contributing to BookHaven!
